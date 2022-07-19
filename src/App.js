@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useContext } from "react";
+
+import CaptureEvent from "./CaptureEvent.js";
+import BarcodeContext from "./barcode-context.js";
 
 function App() {
+  const barcodeContext = useContext(BarcodeContext);
+  
+  useEffect(() => {
+    let tmpBarcode = "";
+    document.addEventListener('keyup', (event) => {
+        console.log(`${event.key}`);
+        if (tmpBarcode.length < 11) {
+          tmpBarcode = tmpBarcode + event.key;
+        }
+        else {
+          barcodeContext.setBarcode(tmpBarcode + event.key);
+          console.log("Barcode detected");
+          tmpBarcode = "";
+        }
+    }, false);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>{barcodeContext.barcode !== "" && <CaptureEvent />}</div>
   );
 }
 
