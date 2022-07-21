@@ -9,15 +9,20 @@ function App() {
   useEffect(() => {
     let tmpBarcode = "";
     document.addEventListener('keyup', (event) => {
-        console.log(`${event.key}`);
-        if (tmpBarcode.length < 11) {
-          tmpBarcode = tmpBarcode + event.key;
+        if (tmpBarcode.length == 0) {
+          setTimeout(() => {
+            if (tmpBarcode[0] === 'h') {
+              tmpBarcode = "https://" + tmpBarcode.slice(13).replaceAll('-', '/');
+            }
+            else {
+              tmpBarcode = "https://dlnkd.tn.gg/01/" + tmpBarcode;
+            }
+            barcodeContext.setBarcode(tmpBarcode);
+            console.log("Scan detected");
+            tmpBarcode = "";
+          }, 500);
         }
-        else {
-          barcodeContext.setBarcode(tmpBarcode + event.key);
-          console.log("Barcode detected");
-          tmpBarcode = "";
-        }
+        tmpBarcode = tmpBarcode + event.key;
     }, false);
   }, []);
 
