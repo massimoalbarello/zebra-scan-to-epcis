@@ -1,13 +1,13 @@
 /* eslint-disable no-undef */
 import { useContext, useState, useEffect } from "react";
 
-import BarcodeContext from "./barcode-context.js";
+import IdentifierContext from "./identifier-context.js";
 
 function CaptureEvent() {
-    const barcodeContext = useContext(BarcodeContext);
-    const barcode = barcodeContext.barcode;
-    console.log(barcode);
-    barcodeContext.setBarcode("");
+    const identifierContext = useContext(IdentifierContext);
+    const identifier = identifierContext.identifier;
+    console.log(identifier);
+    identifierContext.setIdentifier("");
 
     const date = new Date();
     const dateISO = date.toISOString();
@@ -20,7 +20,7 @@ function CaptureEvent() {
         "eventTime": dateISO,
         "eventTimeZoneOffset": "+02:00",
         "readPoint": {"id": "zebraID:" + "9C1214F7123F5642AA5705313F4FB874"},
-        "epcList": [ barcode ],
+        "epcList": [ identifier ],
     }
     const epcisEvent = epcis2.objectToEvent(object);
     epcisEvent.generateHashID({"example": "http://ns.example.com/epcis/"}, true);
