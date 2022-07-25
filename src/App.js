@@ -13,10 +13,12 @@ function App() {
     document.addEventListener('keyup', (event) => {
         if (tmpIdentifier.length == 0) {
           setTimeout(() => {
-            console.log(tmpIdentifier);
+            console.log(`Scan detected: ${tmpIdentifier}`);
             let identifier;
             if (tmpIdentifier.slice(0, 4) === "http") {
-                identifier = "https://" + tmpIdentifier.slice(13).replaceAll('-', '/');
+              // scanner reads different characters instead of ':' so we need to replace it
+              const indexOfEndReplacement = tmpIdentifier.indexOf(";");
+              identifier = "https:" + tmpIdentifier.slice(indexOfEndReplacement+1);
             }
             else {
               identifier = "https://dlnkd.tn.gg";
@@ -28,7 +30,6 @@ function App() {
               }
             }
             identifierContext.setIdentifier(identifier);
-            console.log("Scan detected");
             tmpIdentifier = "";
           }, 500);
         }
