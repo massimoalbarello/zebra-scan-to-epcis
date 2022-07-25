@@ -1,70 +1,26 @@
-# Getting Started with Create React App
+# Intro
+This web app reads scanned code as keyboard inputs and creates an EPCIS 2.0 document. It can parse QR codes encoding a Digital Link and barcodes or data matrices encoding a GS1-128 code.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Scanner setup
+To get start, you need to configure the scanner in HID mode. There is no need to instal the Zebra SDK or any device driver. To configure the scanner in HID mode follow the following: [Set scanner to HID mode](https://supportcommunity.zebra.com/s/article/How-to-setup-an-LS2208-for-USB-communication?language=en_US). After this, the scanner should be working as if it were a keyboard.
 
-## Available Scripts
+## Start web app
 
-In the project directory, you can run:
+In the project directory, run:
+
+### `npm i`
+
+To install the required dependencies. Then:
 
 ### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Open the console to see the output of the scan. The app has no UI. Make sure that the focus is on the breowser window where the webapp is running otherwise (and not the console) otherwise the input from the scanner will not be detected.
+Also, make sure not to press the keyboard once the focus is on the webapp otherwise it will be interpreted as a scanned code and it will fail as it can't be parsed as a GS1-128 code. 
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Code explanation
+Once a keyboard input is detected, the app checks if:
+- the scanned code starts with “http”, we interpret it as a digital link and simply copy the whole code into the epcList (we are supposing that the user doesn’t scan QR codes that are not digital links)
+- the code doesn’t start with “http”, we treat it as a GS1-128 and from it we destructure the AIs “01” and “21” and create a digital link with domain `https://dlnkd.tn.gg`
