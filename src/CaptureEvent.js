@@ -15,8 +15,8 @@ function CaptureEvent() {
     // wrap Zebra scan into EPCIS document
     const object = {
         "type": "ObjectEvent",
-        "action": "OBSERVE",
-        "bizStep": "in_transit",
+        "action": epcis2.cbv.actionTypes.observe,
+        "bizStep": epcis2.cbv.bizSteps.commissioning,
         "eventTime": dateISO,
         "eventTimeZoneOffset": "+02:00",
         "readPoint": {"id": "zebraID:" + "9C1214F7123F5642AA5705313F4FB874"},
